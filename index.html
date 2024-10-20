@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TradeTime Financial Dashboard</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        height: 100%;
+      }
+      .dashboard {
+        display: flex;
+        height: 100%;
+      }
+      .sidebar {
+        width: 250px;
+        background-color: #ffffff;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      .logo img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+      .nav-item {
+        padding: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .nav-item:hover,
+      .nav-item.active {
+        background-color: #f0f0f0;
+      }
+      .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        background-color: #f8f9fa;
+        overflow-y: auto;
+      }
+      .cards {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        width: 30%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .card h3 {
+        margin-top: 0;
+        font-size: 14px;
+        color: #666;
+      }
+      .card .value {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+      .card .change {
+        font-size: 12px;
+        color: #666;
+      }
+      .change.positive {
+        color: green;
+      }
+      .change.negative {
+        color: red;
+      }
+      .chart-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .chart {
+        height: 300px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+      }
+      .time-range {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .time-range button {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .transactions {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f8f9fa;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="/placeholder.svg?height=40&width=40" alt="TradeTime logo" />
+          <h1>TradeTime</h1>
+        </div>
+        <nav>
+          <div class="nav-item active">Dashboard</div>
+          <div class="nav-item">Analytics</div>
+          <div class="nav-item">Portfolio</div>
+          <div class="nav-item">Transactions</div>
+          <div class="nav-item">Messages</div>
+          <div class="nav-item">Invoices</div>
+          <div class="nav-item">Settings</div>
+          <div class="nav-item">Support</div>
+        </nav>
+      </aside>
+      <main class="main-content">
+        <section class="cards">
+          <div class="card">
+            <h3>Stocks</h3>
+            <div class="value">$2,712.90</div>
+            <div class="change negative">-6% / month</div>
+          </div>
+          <div class="card">
+            <h3>Bonds</h3>
+            <div class="value">$2,302.08</div>
+            <div class="change positive">+5% / month</div>
+          </div>
+          <div class="card">
+            <h3>Crypto</h3>
+            <div class="value">$1,238.73</div>
+            <div class="change negative">-4% / month</div>
+          </div>
+        </section>
+        <section class="chart-container">
+          <div class="chart-header">
+            <h2>Total Invested Value</h2>
+            <div class="value">
+              $2,302.08 <span class="change positive">+5%</span>
+            </div>
+          </div>
+          <div
+            class="chart"
+            aria-label="Chart showing total invested value over time"
+          ></div>
+          <div class="time-range">
+            <button>1d</button>
+            <button>1w</button>
+            <button>1m</button>
+            <button>6m</button>
+            <button>1y</button>
+            <button>All</button>
+          </div>
+        </section>
+        <section class="transactions">
+          <h2>Transactions</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Ticker</th>
+                <th>Quantity</th>
+                <th>PPU</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2023-09-01</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td>10</td>
+                <td>$160</td>
+                <td>$1,600</td>
+              </tr>
+              <!-- More rows would be added here -->
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
