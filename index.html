@@ -3,95 +3,738 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TradeTime Financial Dashboard</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Tradetime Dashboard</title>
+    <link
+      rel="icon"
+      href="https://tradetimevest.com/assets/images/logo.png"
+      type="image/png"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        background-color: #ffffff;
+        color: #484848;
+        height: 100vh;
+        overflow: hidden; /* Prevent body scroll */
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 280px;
+        background-color: #ffffff;
+        border-right: 1px solid #e8e8e8;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        overflow-y: auto;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #e8e8e8;
+        background-color: #ffffff;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .logo img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+
+      .logo-text {
+        font-size: 20px;
+        font-weight: bold;
+        color: #484848;
+      }
+
+      /* Navigation Styles */
+      .nav-category {
+        padding: 20px;
+      }
+
+      .nav-category-title {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #767676;
+        margin-bottom: 10px;
+      }
+
+      .nav-item {
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        color: #484848;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        border-radius: 8px;
+        margin: 5px 0;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        background-color: #f7f7f7;
+      }
+
+      .nav-item-text {
+        margin-left: 15px;
+      }
+
+      /* Sidebar Footer */
+      .sidebar-footer {
+        margin-top: auto;
+        padding: 20px;
+        background-color: #ffffff;
+        position: sticky;
+        bottom: 0;
+      }
+
+      .language-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+        background-color: #ffffff;
+        color: #484848;
+      }
+
+      .powered-by {
+        font-size: 12px;
+        color: #767676;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        margin-left: 280px;
+        overflow-y: auto;
+        height: 100vh;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        position: sticky;
+        top: 0;
+        background-color: #ffffff;
+        z-index: 10;
+        padding: 20px 0;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .action-buttons button {
+        padding: 10px 20px;
+        border: 1px solid #484848;
+        background-color: #ffffff;
+        color: #484848;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .action-buttons button:hover {
+        background-color: #484848;
+        color: #ffffff;
+      }
+
+      /* Cards and Grids */
+      .balance-card {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .balance-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #767676;
+      }
+
+      .balance-amount {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-title {
+        font-size: 14px;
+        color: #767676;
+        margin-bottom: 10px;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      /* Trading Section */
+      .trading-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .trading-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .trading-card {
+        background-color: #f7f7f7;
+        padding: 15px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .trading-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .trading-name,
+      .trading-price {
+        font-weight: bold;
+      }
+
+      .trading-change {
+        font-size: 14px;
+        color: #767676;
+      }
+
+      /* Referral Section */
+      .referral-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .referral-link {
+        display: flex;
+        flex-direction: column;
+        margin-top: 15px;
+      }
+
+      .referral-link input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+
+      .referral-link button {
+        padding: 10px 20px;
+        background-color: #484848;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      /* Mobile Menu Components */
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+      }
+
+      .hamburger-menu {
+        display: none;
+        cursor: pointer;
+        width: 30px;
+        height: 20px;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+      .hamburger-menu span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: #484848;
+        position: absolute;
+        transition: all 0.3s;
+      }
+
+      .hamburger-menu span:first-child {
+        top: 0;
+      }
+
+      .hamburger-menu span:nth-child(2) {
+        top: 9px;
+      }
+
+      .hamburger-menu span:last-child {
+        bottom: 0;
+      }
+
+      .hamburger-menu.active span:first-child {
+        transform: rotate(45deg);
+        top: 9px;
+      }
+
+      .hamburger-menu.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger-menu.active span:last-child {
+        transform: rotate(-45deg);
+        bottom: 9px;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 1023px) {
+        body {
+          overflow-y: auto;
+        }
+
+        .main-content {
+          margin-left: 0;
+          padding-top: 60px;
+        }
+
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease-in-out;
+          width: 100%;
+          z-index: 999;
+        }
+
+        .sidebar.active {
+          transform: translateX(0);
+        }
+
+        .hamburger-menu {
+          display: block;
+        }
+
+        .overlay.active {
+          display: block;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .main-content {
+          padding: 30px;
+        }
+
+        .header {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .greeting {
+          margin-bottom: 0;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .trading-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .referral-link {
+          flex-direction: row;
+        }
+
+        .referral-link input {
+          flex-grow: 1;
+          margin-bottom: 0;
+          border-radius: 4px 0 0 4px;
+        }
+
+        .referral-link button {
+          border-radius: 0 4px 4px 0;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .sidebar {
+          width: 280px;
+          position: absolute;
+          height: 100vh;
+          border-right: 1px solid #e8e8e8;
+          border-bottom: none;
+        }
+
+        .main-content {
+          padding: 0 40px;
+        }
+
+        .hamburger-menu {
+          display: none;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="dashboard">
-      <aside class="sidebar">
-        <div class="logo">
-          <img
-            src="https://tradetimevest.com/assets/images/logo.png"
-            alt="TradeTime logo"
-          />
-          <h1>TradeTime</h1>
-        </div>
-        <nav>
-          <div class="nav-item active">Dashboard</div>
-          <div class="nav-item">Analytics</div>
-          <div class="nav-item">Portfolio</div>
-          <div class="nav-item">Transactions</div>
-          <div class="nav-item">Messages</div>
-          <div class="nav-item">Invoices</div>
-          <div class="nav-item">Settings</div>
-          <div class="nav-item">Support</div>
-        </nav>
-      </aside>
-      <main class="main-content">
-        <section class="cards">
-          <div class="card">
-            <h3>Stocks</h3>
-            <div class="value">$2,712.90</div>
-            <div class="change negative">-6% / month</div>
-          </div>
-          <div class="card">
-            <h3>Bonds</h3>
-            <div class="value">$2,302.08</div>
-            <div class="change positive">+5% / month</div>
-          </div>
-          <div class="card">
-            <h3>Crypto</h3>
-            <div class="value">$1,238.73</div>
-            <div class="change negative">-4% / month</div>
-          </div>
-        </section>
-        <section class="chart-container">
-          <div class="chart-header">
-            <h2>Total Invested Value</h2>
-            <div class="value">
-              $2,302.08 <span class="change positive">+5%</span>
-            </div>
-          </div>
-          <div
-            class="chart"
-            aria-label="Chart showing total invested value over time"
-          ></div>
-          <div class="time-range">
-            <button>1d</button>
-            <button>1w</button>
-            <button>1m</button>
-            <button>6m</button>
-            <button>1y</button>
-            <button>All</button>
-          </div>
-        </section>
-        <section class="transactions">
-          <h2>Transactions</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Ticker</th>
-                <th>Quantity</th>
-                <th>PPU</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>2023-09-01</td>
-                <td>Buy</td>
-                <td>AAPL</td>
-                <td>10</td>
-                <td>$160</td>
-                <td>$1,600</td>
-              </tr>
-              <!-- More rows would be added here -->
-            </tbody>
-          </table>
-        </section>
-      </main>
+    <div class="hamburger-menu" onclick="toggleSidebar()">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar">
+      <div class="logo">
+        <img
+          src="https://tradetimevest.com/assets/images/logo.png"
+          alt="Tradetime Logo"
+        />
+        <span class="logo-text">Tradetime</span>
+      </div>
+      <div class="nav-category">
+        <a href="#" class="nav-item active"
+          ><span class="nav-item-text">Dashboard</span></a
+        >
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Fund Account</span></a
+        >
+      </div>
+      <div class="nav-category">
+        <div class="nav-category-title">Investment</div>
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Invest</span></a
+        >
+      </div>
+      <div class="nav-category">
+        <div class="nav-category-title">Account</div>
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Withdraw</span></a
+        >
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Referrals</span></a
+        >
+      </div>
+      <div class="nav-category">
+        <div class="nav-category-title">Transaction</div>
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Deposit Record</span></a
+        >
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Withdrawal Record</span></a
+        >
+      </div>
+      <div class="nav-category">
+        <a href="#" class="nav-item"
+          ><span class="nav-item-text">Settings</span></a
+        >
+      </div>
+      <div class="sidebar-footer">
+        <select class="language-select">
+          <option>Select Language</option>
+          <option>English</option>
+          <option>Español</option>
+          <option>Français</option>
+        </select>
+        <div class="powered-by">Powered by Google</div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="header">
+        <h1 class="greeting">Hello, test</h1>
+        <div class="action-buttons">
+          <button>Invest</button>
+          <button>Fund</button>
+        </div>
+      </div>
+      <div class="balance-card">
+        <div class="balance-title">Balance</div>
+        <div class="balance-amount">$49,050</div>
+        <canvas id="balanceChart"></canvas>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Today's Earnings</div>
+          <div class="stat-value">$0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Investment Earnings</div>
+          <div class="stat-value">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Active Investments</div>
+          <div class="stat-value">0</div>
+        </div>
+      </div>
+      <div class="trading-section">
+        <h2 class="section-title">Stocks Trading</h2>
+        <div class="trading-grid">
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">AAPL</div>
+                <div class="trading-change">+1.2%</div>
+              </div>
+            </div>
+            <div class="trading-price">$150.23</div>
+          </div>
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">GOOGL</div>
+                <div class="trading-change">-0.5%</div>
+              </div>
+            </div>
+            <div class="trading-price">$2,800.56</div>
+          </div>
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">TSLA</div>
+                <div class="trading-change">+2.3%</div>
+              </div>
+            </div>
+            <div class="trading-price">$750.45</div>
+          </div>
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">MSFT</div>
+                <div class="trading-change">+0.8%</div>
+              </div>
+            </div>
+            <div class="trading-price">$305.78</div>
+          </div>
+        </div>
+        <canvas id="stocksChart"></canvas>
+      </div>
+      <div class="trading-section">
+        <h2 class="section-title">Crypto Trading</h2>
+        <div class="trading-grid">
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">BTC</div>
+                <div class="trading-change">+2.5%</div>
+              </div>
+            </div>
+            <div class="trading-price">$45,230.67</div>
+          </div>
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">ETH</div>
+                <div class="trading-change">-1.3%</div>
+              </div>
+            </div>
+            <div class="trading-price">$3,245.89</div>
+          </div>
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">XRP</div>
+                <div class="trading-change">+0.7%</div>
+              </div>
+            </div>
+            <div class="trading-price">$0.75</div>
+          </div>
+          <div class="trading-card">
+            <div class="trading-info">
+              <div>
+                <div class="trading-name">DOGE</div>
+                <div class="trading-change">-2.1%</div>
+              </div>
+            </div>
+            <div class="trading-price">$0.18</div>
+          </div>
+        </div>
+        <canvas id="cryptoChart"></canvas>
+      </div>
+      <div class="referral-section">
+        <h2 class="section-title">Refer and earn</h2>
+        <p>Use the link below to invite your friends</p>
+        <div class="referral-link">
+          <input type="text" value="https://tradetimevest.com/reg" readonly />
+          <button onclick="copyReferralLink()">Copy</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Sidebar Toggle Function
+      function toggleSidebar() {
+        const sidebar = document.querySelector(".sidebar");
+        const overlay = document.querySelector(".overlay");
+        const hamburger = document.querySelector(".hamburger-menu");
+
+        sidebar.classList.toggle("active");
+
+        // Handle overlay and hamburger menu if they exist
+        if (overlay) overlay.classList.toggle("active");
+        if (hamburger) hamburger.classList.toggle("active");
+
+        // Prevent body scroll when sidebar is open on mobile
+        document.body.style.overflow = sidebar.classList.contains("active")
+          ? "hidden"
+          : "auto";
+      }
+
+      // Referral Link Copy Function
+      function copyReferralLink() {
+        const referralLink = document.querySelector(".referral-link input");
+        referralLink.select();
+        document.execCommand("copy");
+        alert("Referral link copied to clipboard!");
+      }
+
+      // Chart Initialization
+      document.addEventListener("DOMContentLoaded", function () {
+        // Balance Chart
+        const balanceCtx = document
+          .getElementById("balanceChart")
+          .getContext("2d");
+        new Chart(balanceCtx, {
+          type: "line",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [
+              {
+                label: "Balance",
+                data: [40000, 42000, 45000, 47000, 48000, 49050],
+                borderColor: "rgb(75, 192, 192)",
+                tension: 0.1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+
+        // Stocks Chart
+        const stocksCtx = document
+          .getElementById("stocksChart")
+          .getContext("2d");
+        new Chart(stocksCtx, {
+          type: "line",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [
+              {
+                label: "AAPL",
+                data: [140, 145, 148, 152, 149, 150.23],
+                borderColor: "rgb(255, 99, 132)",
+                tension: 0.1,
+              },
+              {
+                label: "GOOGL",
+                data: [2700, 2750, 2800, 2780, 2820, 2800.56],
+                borderColor: "rgb(54, 162, 235)",
+                tension: 0.1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+              },
+            },
+          },
+        });
+
+        // Crypto Chart
+        const cryptoCtx = document
+          .getElementById("cryptoChart")
+          .getContext("2d");
+        new Chart(cryptoCtx, {
+          type: "line",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [
+              {
+                label: "BTC",
+                data: [40000, 42000, 45000, 43000, 44000, 45230.67],
+                borderColor: "rgb(255, 206, 86)",
+                tension: 0.1,
+              },
+              {
+                label: "ETH",
+                data: [3000, 3100, 3200, 3150, 3300, 3245.89],
+                borderColor: "rgb(75, 192, 192)",
+                tension: 0.1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+              },
+            },
+          },
+        });
+      });
+    </script>
   </body>
 </html>
